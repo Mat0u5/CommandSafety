@@ -22,13 +22,24 @@ import net.minecraft.util.math.Vec3d;
 import java.util.Collection;
 import java.util.List;
 
+import static net.mat0u5.commandsafety.Main.config;
+
 public class CommandAnalyzer {
 
-    private static final int MAX_PLAYERS = 1;
-    private static final int MAX_LIVING_ENTITIES = 25;
-    private static final int MAX_ENTITIES = 50;
-    private static final int MAX_SCOREBOARD_MODIFICATIONS = 50;
-    private static final int MAX_BLOCKS = 10_000;
+    public static int MAX_PLAYERS = 1;
+    public static int MAX_LIVING_ENTITIES = 25;
+    public static int MAX_ENTITIES = 50;
+    public static int MAX_SCORE_HOLDERS = 50;
+    public static int MAX_BLOCKS = 10_000;
+
+    public static void loadConfig() {
+        if (config == null) return;
+        MAX_PLAYERS = config.getOrCreateInt("max_players", 1);
+        MAX_LIVING_ENTITIES = config.getOrCreateInt("max_living_entities", 25);
+        MAX_ENTITIES = config.getOrCreateInt("max_entities", 50);
+        MAX_SCORE_HOLDERS = config.getOrCreateInt("max_score_holders", 50);
+        MAX_BLOCKS = config.getOrCreateInt("max_blocks", 10000);
+    }
 
     public static boolean shouldConfirm(String command, CommandContext<ServerCommandSource> context) {
         String commandName = getCommandName(command);
@@ -189,7 +200,7 @@ public class CommandAnalyzer {
                 return true;
             }
         }
-        return getScoreHolders(argumentName, context).size() > MAX_SCOREBOARD_MODIFICATIONS;
+        return getScoreHolders(argumentName, context).size() > MAX_SCORE_HOLDERS;
     }
 
     private static int calculateBlockVolume(BlockPos from, BlockPos to) {
