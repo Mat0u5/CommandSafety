@@ -3,7 +3,7 @@ plugins {
 	id 'maven-publish'
 }
 
-version = "${project.mod_version}+${stonecutter.current.project}"
+version = "${project.mod_version}"
 group = project.maven_group
 
 base {

@@ -7,7 +7,6 @@ import net.minecraft.command.argument.ScoreHolderArgumentType;
 import net.minecraft.command.argument.ScoreboardObjectiveArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.scoreboard.ScoreHolder;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -23,6 +22,10 @@ import java.util.Collection;
 import java.util.List;
 
 import static net.mat0u5.commandsafety.Main.config;
+
+//? if >= 1.20.3 {
+/*import net.minecraft.scoreboard.ScoreHolder;
+*///?}
 
 public class CommandAnalyzer {
 
@@ -92,8 +95,11 @@ public class CommandAnalyzer {
         }
         return List.of();
     }
-
-    private static Collection<ScoreHolder> getScoreHolders(String argumentName, CommandContext<ServerCommandSource> context) {
+    //? if <= 1.20.2 {
+    private static Collection<String> getScoreHolders(String argumentName, CommandContext<ServerCommandSource> context) {
+    //?} else {
+    /*private static Collection<ScoreHolder> getScoreHolders(String argumentName, CommandContext<ServerCommandSource> context) {
+    *///?}
         try {
             try {
                 return ScoreHolderArgumentType.getScoreboardScoreHolders(context, argumentName);
