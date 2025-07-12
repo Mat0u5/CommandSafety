@@ -1,9 +1,9 @@
 {
 	"schemaVersion": 1,
-	"id": "modid",
+	"id": "commandsafety",
 	"version": "${version}",
-	"name": "Example mod",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "Command Safety",
+	"description": "Adds a confirmation when you run dangerous commands ('/kill @e' etc).",
 	"authors": [
 		"Mat0u5"
 	],
@@ -12,18 +12,18 @@
 		"sources": "https://github.com/Mat0u5/FabricModTemplate"
 	},
 	"license": "MIT",
-	"icon": "assets/modid/icon.png",
+	"icon": "assets/commandsafety/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"net.mat0u5.modid.Main"
+			"net.mat0u5.commandsafety.Main"
 		],
 		"client": [
-			"net.mat0u5.modid.MainClient"
+			"net.mat0u5.commandsafety.MainClient"
 		]
 	},
 	"mixins": [
-		"modid.mixins.json"
+		"commandsafety.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.14.21",

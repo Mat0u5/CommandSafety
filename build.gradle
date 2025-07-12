@@ -16,7 +16,7 @@ repositories {
 loom {
 	//splitEnvironmentSourceSets()
 	mods {
-		"modid" {
+		"commandsafety" {
 			sourceSet sourceSets.main
 			//sourceSet sourceSets.client
 		}
