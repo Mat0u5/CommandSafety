@@ -12,7 +12,7 @@ jobs:
     if: ${{ !contains(github.event.head_commit.message, '{skip_build}') }}
     strategy:
       matrix:
-        minecraft_version: [1.21, 1.21.2]
+        minecraft_version: [1.21, 1.21.5]
     runs-on: ubuntu-22.04
     steps:
       - name: checkout repository
