@@ -3,7 +3,7 @@
 	"package": "net.mat0u5.commandsafety.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"ExampleMixin"
+		"CommandManagerMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
