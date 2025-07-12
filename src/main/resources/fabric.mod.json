@@ -9,7 +9,7 @@
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/Mat0u5/FabricModTemplate"
+		"sources": "https://github.com/Mat0u5/CommandSafety"
 	},
 	"license": "MIT",
 	"icon": "assets/commandsafety/icon.png",

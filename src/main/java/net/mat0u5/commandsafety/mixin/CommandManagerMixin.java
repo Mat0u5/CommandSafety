@@ -22,7 +22,7 @@ public class CommandManagerMixin {
             CommandContext<ServerCommandSource> context = parseResults.getContext().build(command);
             if (CommandAnalyzer.shouldConfirm(command, context)) {
                 CommandAnalyzer.sendConfirmationMessage(player, command, context);
-                player.playSoundToPlayer(SoundEvents.BLOCK_NOTE_BLOCK_DIDGERIDOO.value(), SoundCategory.BLOCKS, 1, 1);
+                player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_DIDGERIDOO.value(), SoundCategory.BLOCKS, 1, 1);
                 ci.cancel();
             }
         }
