@@ -3,7 +3,7 @@
 	"id": "commandsafety",
 	"version": "${version}",
 	"name": "Command Safety",
-	"description": "Adds a confirmation when you run dangerous commands ('/kill @e' etc).",
+	"description": "Warns the player when running potentially dangerous commands ('/kill @e' etc).",
 	"authors": [
 		"Mat0u5"
 	],
