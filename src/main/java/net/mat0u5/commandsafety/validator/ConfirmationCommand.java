@@ -26,7 +26,7 @@ public class ConfirmationCommand {
                                 CommandManager.RegistrationEnvironment registrationEnvironment) {
         dispatcher.register(
                 literal("confirmcmd")
-                .requires(source -> ((source.getPlayer() != null && source.getPlayer().hasPermissionLevel(2)) || (source.getEntity() == null)))
+                        .requires(source -> (hasPermission(source) || (source.getEntity() == null)))
                 .then(argument("action", StringArgumentType.string())
                         .executes(ConfirmationCommand::execute)
                 )
@@ -47,6 +47,11 @@ public class ConfirmationCommand {
                         )
                 )
         );
+    }
+
+    private static boolean hasPermission(ServerCommandSource source) {
+        if (source.getPlayer() == null) return false;
+        return source.getServer().getPlayerManager().isOperator(source.getPlayer().getGameProfile());
     }
 
     private static int setProperty(ServerCommandSource source, String name, int value) {

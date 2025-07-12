@@ -310,6 +310,7 @@ public class CommandAnalyzer {
         CommandValidator.addPendingCommand(player.getUuid(), command, warning);
         CommandValidator.PendingCommand pending = CommandValidator.getPendingCommand(player.getUuid());
 
+        //? if <= 1.21.4 {
         MutableText confirmText = Text.literal("[CONFIRM]")
                 .formatted(Formatting.GREEN, Formatting.BOLD)
                 .styled(style -> style
@@ -325,6 +326,23 @@ public class CommandAnalyzer {
                                 "/confirmcmd cancel"))
                         .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                 Text.literal("Click to cancel"))));
+        //?} else {
+        /*MutableText confirmText = Text.literal("[CONFIRM]")
+                .formatted(Formatting.GREEN, Formatting.BOLD)
+                .styled(style -> style
+                        .withClickEvent(new ClickEvent.RunCommand(
+                                "/confirmcmd " + pending.confirmId))
+                        .withHoverEvent(new HoverEvent.ShowText(
+                                Text.literal("Click to execute the command"))));
+
+        MutableText cancelText = Text.literal("[CANCEL]")
+                .formatted(Formatting.RED, Formatting.BOLD)
+                .styled(style -> style
+                        .withClickEvent(new ClickEvent.RunCommand(
+                                "/confirmcmd cancel"))
+                        .withHoverEvent(new HoverEvent.ShowText(
+                                Text.literal("Click to cancel"))));
+        *///?}
 
         MutableText message = Text.literal("⚠ DANGEROUS COMMAND WARNING ⚠")
                 .formatted(Formatting.YELLOW, Formatting.BOLD)

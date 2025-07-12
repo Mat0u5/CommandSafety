@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Delete Dev Versions" type="ShConfigurationType" folderName="Scripts">
-    <option name="SCRIPT_TEXT" value="del &quot;versions/*/build/libs/lifeseries-dev-*.jar&quot;" />
+    <option name="SCRIPT_TEXT" value="del &quot;versions/*/build/libs/commandsafety-dev-*.jar&quot;" />
     <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
     <option name="SCRIPT_PATH" value="" />
     <option name="SCRIPT_OPTIONS" value="" />
