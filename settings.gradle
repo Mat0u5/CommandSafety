@@ -10,12 +10,12 @@ pluginManagement {
 	}
 }
 plugins {
-	id "dev.kikugie.stonecutter" version "0.7.8" //https://maven.kikugie.dev/#/releases/dev/kikugie/stonecutter
+	id "dev.kikugie.stonecutter" version "0.8.3" //https://maven.kikugie.dev/#/releases/dev/kikugie/stonecutter
 }
 
 stonecutter {
 	create(rootProject) {
-		versions "1.21", "1.21.5", "1.21.9"
-		vcsVersion = "1.21"
+		versions "1.21.11"
+		vcsVersion = "1.21.11"
 	}
 }
