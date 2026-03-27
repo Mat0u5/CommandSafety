@@ -335,6 +335,6 @@ public class CommandAnalyzer {
                 .append(Component.literal("  "))
                 .append(cancelText);
 
-        player.displayClientMessage(message, false);
+        player.sendSystemMessage(message, false);
     }
 }

@@ -78,13 +78,13 @@ public class ConfirmationCommand {
         CommandValidator.PendingCommand pending = CommandValidator.getPendingCommand(player.getUUID());
 
         if (pending == null) {
-            player.displayClientMessage(Component.literal("No pending command to confirm.").withStyle(ChatFormatting.RED), false);
+            player.sendSystemMessage(Component.literal("No pending command to confirm.").withStyle(ChatFormatting.RED), false);
             return 0;
         }
 
         if ("cancel".equals(action)) {
             CommandValidator.removePendingCommand(player.getUUID());
-            player.displayClientMessage(Component.literal("Command cancelled.").withStyle(ChatFormatting.GREEN), false);
+            player.sendSystemMessage(Component.literal("Command cancelled.").withStyle(ChatFormatting.GREEN), false);
             return 1;
         }
 
@@ -94,14 +94,14 @@ public class ConfirmationCommand {
             try {
                 CommandDispatcher<CommandSourceStack> dispatcher = context.getSource().getServer().getCommands().getDispatcher();
                 dispatcher.execute(pending.command, source);
-                player.displayClientMessage(Component.literal("Command executed.").withStyle(ChatFormatting.GREEN), false);
+                player.sendSystemMessage(Component.literal("Command executed.").withStyle(ChatFormatting.GREEN), false);
                 return 1;
             } catch (Exception e) {
-                player.displayClientMessage(Component.literal("Failed to execute command: " + e.getMessage()).withStyle(ChatFormatting.RED), false);
+                player.sendSystemMessage(Component.literal("Failed to execute command: " + e.getMessage()).withStyle(ChatFormatting.RED), false);
                 return 0;
             }
         } else {
-            player.displayClientMessage(Component.literal("Invalid confirmation code.").withStyle(ChatFormatting.RED), false);
+            player.sendSystemMessage(Component.literal("Invalid confirmation code.").withStyle(ChatFormatting.RED), false);
             return 0;
         }
     }
