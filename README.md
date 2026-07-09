@@ -34,3 +34,4 @@ Very useful when working on large projects, especially when multiple people (*th
 - `/confirmcmd config <name> <value>` - Sets the value of a config.
 
 Possible values for `<name>` are: *max_blocks, max_players, max_living_entities, max_entities, max_score_holders*
+

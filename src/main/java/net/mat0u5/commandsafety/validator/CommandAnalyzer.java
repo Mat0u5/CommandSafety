@@ -92,7 +92,8 @@ public class CommandAnalyzer {
         return List.of();
     }
 
-    private static Collection<ScoreHolder> getScoreHolders(String argumentName, CommandContext<CommandSourceStack> context) {
+    //? if <= 1.20.2 {
+    private static Collection<String> getScoreHolders(String argumentName, CommandContext<CommandSourceStack> context) {
         try {
             try {
                 return ScoreHolderArgument.getNamesWithDefaultWildcard(context, argumentName);
@@ -102,6 +103,18 @@ public class CommandAnalyzer {
         }
         return List.of();
     }
+    //?} else {
+    /*private static Collection<ScoreHolder> getScoreHolders(String argumentName, CommandContext<CommandSourceStack> context) {
+        try {
+            try {
+                return ScoreHolderArgument.getNamesWithDefaultWildcard(context, argumentName);
+            }catch(IllegalArgumentException e) {}
+        }catch(Exception e) {
+            Main.LOGGER.error("[CommandAnalyzer] error4:" + e.getMessage());
+        }
+        return List.of();
+    }
+    *///?}
 
     private static boolean entityConstraints(List<String> arguments, CommandContext<CommandSourceStack> context) {
         try {
@@ -312,18 +325,24 @@ public class CommandAnalyzer {
         MutableComponent confirmText = Component.literal("[CONFIRM]")
                 .withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD)
                 .withStyle(style -> style
-                        .withClickEvent(new ClickEvent.RunCommand(
-                                "/confirmcmd " + pending.confirmId))
-                        .withHoverEvent(new HoverEvent.ShowText(
-                                Component.literal("Click to execute the command"))));
+                        //? if <= 1.21.4 {
+                        .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/confirmcmd " + pending.confirmId))
+                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Click to execute the command"))));
+                        //?} else {
+                        /*.withClickEvent(new ClickEvent.RunCommand("/confirmcmd " + pending.confirmId))
+                        .withHoverEvent(new HoverEvent.ShowText(Component.literal("Click to execute the command"))));
+                        *///?}
 
         MutableComponent cancelText = Component.literal("[CANCEL]")
                 .withStyle(ChatFormatting.RED, ChatFormatting.BOLD)
                 .withStyle(style -> style
-                        .withClickEvent(new ClickEvent.RunCommand(
-                                "/confirmcmd cancel"))
-                        .withHoverEvent(new HoverEvent.ShowText(
-                                Component.literal("Click to cancel"))));
+                        //? if <= 1.21.4 {
+                        .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/confirmcmd cancel"))
+                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Click to cancel"))));
+                        //?} else {
+                        /*.withClickEvent(new ClickEvent.RunCommand("/confirmcmd cancel"))
+                        .withHoverEvent(new HoverEvent.ShowText(Component.literal("Click to cancel"))));
+                        *///?}
 
         MutableComponent message = Component.literal("⚠ DANGEROUS COMMAND WARNING ⚠")
                 .withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD)

@@ -1,11 +1,15 @@
 {
-	"required": true,
-	"package": "net.mat0u5.commandsafety.mixin",
-	"compatibilityLevel": "JAVA_16",
-	"mixins": [
-		"CommandManagerMixin"
-	],
-	"injectors": {
-		"defaultRequire": 1
-	}
+  "package": "net.mat0u5.commandsafety.mixin",
+  "required": true,
+  "minVersion": "0.8",
+  "refmap": "${id}.mixins.refmap.json",
+  "compatibilityLevel": "${java}",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+    "CommandsMixin",
+    "CommandManagerMixin"
+  ],
+  "client": []
 }

@@ -1,4 +1,4 @@
-#Available Tags: {skip_build}
+#Available Tags: {build}
 
 name: build
 
@@ -9,10 +9,7 @@ on:
 
 jobs:
   build:
-    if: ${{ !contains(github.event.head_commit.message, '{skip_build}') }}
-    strategy:
-      matrix:
-        minecraft_version: [1.21, 1.21.5]
+    if: ${{ contains(github.event.head_commit.message, '{build}') }}
     runs-on: ubuntu-22.04
     steps:
       - name: checkout repository
@@ -21,10 +18,10 @@ jobs:
       - name: validate gradle wrapper
         uses: gradle/wrapper-validation-action@v2
 
-      - name: setup jdk 21
+      - name: setup jdk 25
         uses: actions/setup-java@v4
         with:
-          java-version: 21
+          java-version: 25
           distribution: 'microsoft'
 
       - name: make gradle wrapper executable
@@ -35,5 +32,6 @@ jobs:
       - name: capture build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: Artifacts-${{ matrix.minecraft_version }}
-          path: versions/${{ matrix.minecraft_version }}/build/libs/
+          name: Built JARs
+          path: |
+            ./versions/**/build/libs/*.jar

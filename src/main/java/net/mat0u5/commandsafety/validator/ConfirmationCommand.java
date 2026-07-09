@@ -50,7 +50,11 @@ public class ConfirmationCommand {
 
     private static boolean hasPermission(CommandSourceStack source) {
         if (source.getPlayer() == null) return false;
-        return source.getServer().getPlayerList().isOp(source.getPlayer().nameAndId());
+        //? if <= 1.21.9 {
+        return source.getServer().getPlayerList().isOp(source.getPlayer().getGameProfile());
+        //?} else {
+        /*return source.getServer().getPlayerList().isOp(source.getPlayer().nameAndId());
+        *///?}
     }
 
     private static int setProperty(CommandSourceStack source, String name, int value) {
