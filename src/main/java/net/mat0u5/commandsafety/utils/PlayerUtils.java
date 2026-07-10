@@ -5,8 +5,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 //? if > 1.19.2 {
-/*import net.minecraft.core.registries.BuiltInRegistries;
-*///?}
+import net.minecraft.core.registries.BuiltInRegistries;
+//?}
 
 public class PlayerUtils {
 
@@ -14,10 +14,10 @@ public class PlayerUtils {
         player.connection
                 .send(
                         //? if <= 1.14 {
-                        new ClientboundSoundPacket(
+                        /*new ClientboundSoundPacket(
                                 sound, soundSource, player.x, player.y, player.z, volume, pitch
                         )
-                        //?} else if <= 1.18 {
+                        *///?} else if <= 1.18 {
                         /*new ClientboundSoundPacket(
                                 sound, soundSource, player.getX(), player.getY(), player.getZ(), volume, pitch
                         )
@@ -26,10 +26,10 @@ public class PlayerUtils {
                                 sound, soundSource, player.getX(), player.getY(), player.getZ(), volume, pitch, player.getRandom().nextLong()
                         )
                         *///?} else {
-                        /*new ClientboundSoundPacket(
+                        new ClientboundSoundPacket(
                                 BuiltInRegistries.SOUND_EVENT.wrapAsHolder(sound), soundSource, player.getX(), player.getY(), player.getZ(), volume, pitch, player.getRandom().nextLong()
                         )
-                        *///?}
+                        //?}
                 );
     }
 }

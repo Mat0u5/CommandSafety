@@ -45,30 +45,30 @@ public class ConfirmationCommand {
     }
     private static boolean hasPermission(CommandSourceStack source) {
     //? if <= 1.18 {
-        try {
+        /*try {
             return source.getServer().getPlayerList().isOp(source.getPlayerOrException().getGameProfile());
         }catch(Exception e) {}
         return false;
-    //?} else {
-        /*if (source.getPlayer() == null) return false;
+    *///?} else {
+        if (source.getPlayer() == null) return false;
         //? if <= 1.21.6 {
-        return source.getServer().getPlayerList().isOp(source.getPlayer().getGameProfile());
-        //?} else {
-        /^return source.getServer().getPlayerList().isOp(source.getPlayer().nameAndId());
-        ^///?}
-    *///?}
+        /*return source.getServer().getPlayerList().isOp(source.getPlayer().getGameProfile());
+        *///?} else {
+        return source.getServer().getPlayerList().isOp(source.getPlayer().nameAndId());
+        //?}
+    //?}
     }
 
     private static int setProperty(CommandSourceStack source, String name, int value) {
         config.setProperty(name, String.valueOf(value));
         CommandAnalyzer.loadConfig();
         //? if <= 1.15 {
-        source.sendSuccess(new TextComponent("Set config '" + name + "' to: " + value), false);
-        //?} else if <= 1.18 {
+        /*source.sendSuccess(Component.literal("Set config '" + name + "' to: " + value), false);
+        *///?} else if <= 1.18 {
         /*source.sendSuccess(Component.nullToEmpty("Set config '" + name + "' to: " + value), false);
         *///?} else {
-        /*source.sendSystemMessage(Component.nullToEmpty("Set config '" + name + "' to: " + value));
-        *///?}
+        source.sendSystemMessage(Component.nullToEmpty("Set config '" + name + "' to: " + value));
+        //?}
         return 1;
     }
 
@@ -76,23 +76,25 @@ public class ConfirmationCommand {
         String property = config.getProperty(name);
         if (property == null) {
             //? if <= 1.15 {
-            source.sendFailure(new TextComponent("Config '" + name + "' not found."));
-            //?} else {
-            /*source.sendFailure(Component.nullToEmpty("Config '" + name + "' not found."));
-            *///?}
+            /*source.sendFailure(Component.literal("Config '" + name + "' not found."));
+            *///?} else {
+            source.sendFailure(Component.nullToEmpty("Config '" + name + "' not found."));
+            //?}
             return 0;
         }
         //? if <= 1.15 {
-        source.sendSuccess(new TextComponent("Config '" + name + "' is set to: " + property), false);
-        //?} else if <= 1.18 {
+        /*source.sendSuccess(Component.literal("Config '" + name + "' is set to: " + property), false);
+        *///?} else if <= 1.18 {
         /*source.sendSuccess(Component.nullToEmpty("Config '" + name + "' is set to: " + property), false);
         *///?} else {
-        /*source.sendSystemMessage(Component.nullToEmpty("Config '" + name + "' is set to: " + property));
-        *///?}
+        source.sendSystemMessage(Component.nullToEmpty("Config '" + name + "' is set to: " + property));
+        //?}
         return 1;
     }
 
+    public static boolean executing = false;
     private static int execute(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        executing = false;
         CommandSourceStack source = context.getSource();
         ServerPlayer player = source.getPlayerOrException();
         String action = StringArgumentType.getString(context, "action");
@@ -100,13 +102,15 @@ public class ConfirmationCommand {
         CommandValidator.PendingCommand pending = CommandValidator.getPendingCommand(player.getUUID());
 
         if (pending == null) {
-            player.displayClientMessage(new TextComponent("No pending command to confirm.").withStyle(ChatFormatting.RED), false);
+            player.sendSystemMessage(Component.literal("No pending command to confirm.").withStyle(ChatFormatting.RED), false);
+            executing = false;
             return 0;
         }
 
         if ("cancel".equals(action)) {
             CommandValidator.removePendingCommand(player.getUUID());
-            player.displayClientMessage(new TextComponent("Command cancelled.").withStyle(ChatFormatting.GREEN), false);
+            player.sendSystemMessage(Component.literal("Command cancelled.").withStyle(ChatFormatting.GREEN), false);
+            executing = false;
             return 1;
         }
 
@@ -115,16 +119,20 @@ public class ConfirmationCommand {
 
             try {
                 CommandDispatcher<CommandSourceStack> dispatcher = context.getSource().getServer().getCommands().getDispatcher();
+                executing = true;
                 dispatcher.execute(pending.command, source);
-                player.displayClientMessage(new TextComponent("Command executed.").withStyle(ChatFormatting.GREEN), false);
+                executing = false;
+                player.sendSystemMessage(Component.literal("Command executed.").withStyle(ChatFormatting.GREEN), false);
                 return 1;
             } catch (Exception e) {
-                player.displayClientMessage(new TextComponent("Failed to execute command: " + e.getMessage()).withStyle(ChatFormatting.RED), false);
+                player.sendSystemMessage(Component.literal("Failed to execute command: " + e.getMessage()).withStyle(ChatFormatting.RED), false);
+                executing = false;
                 return 0;
             }
         } else {
-            player.displayClientMessage(new TextComponent("Invalid confirmation code.").withStyle(ChatFormatting.RED), false);
+            player.sendSystemMessage(Component.literal("Invalid confirmation code.").withStyle(ChatFormatting.RED), false);
+            executing = false;
             return 0;
         }
-    }
+	}
 }

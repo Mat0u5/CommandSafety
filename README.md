@@ -35,3 +35,18 @@ Very useful when working on large projects, especially when multiple people (*th
 
 Possible values for `<name>` are: *max_blocks, max_players, max_living_entities, max_entities, max_score_holders*
 
+
+## Compatibility Table
+
+| Fabric           | Forge            | NeoForge         |
+|------------------|------------------| ---------------- |
+| 1.14 - 1.14.4    | 1.19.2           | 1.20.4 - 1.21.4  |
+| 1.15 - 1.15.2    | 1.19.4           | 1.21.5 - 1.21.8  |
+| 1.16 - 1.18.2    | 1.20 - 1.20.1    | 1.21.9 - 1.21.11 |
+| 1.19.1 - 1.19.2  | 1.20.5 - 1.21.4  | 26.1+            |
+| 1.19.3 - 1.20.2  | 1.21.5 - 1.21.8  |                  |
+| 1.20.3 - 1.20.6  | 1.21.9 - 1.21.11 |                  |
+| 1.21 - 1.21.4    | 26.1+            |                  |
+| 1.21.5 - 1.21.8  |                  |                  |
+| 1.21.9 - 1.21.11 |                  |                  |
+| 26.1+            |                  |                  |
