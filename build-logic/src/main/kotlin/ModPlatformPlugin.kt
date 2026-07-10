@@ -526,6 +526,10 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 	}
 
 	private fun configureStonecutterReplacements(stonecutter: StonecutterBuildExtension) {
+		stonecutter.replacements.string(stonecutter.eval(stonecutter.current.version, ">=1.19"), "!renames_1_19") {
+			replace("player.displayClientMessage(", "player.sendSystemMessage(")
+			replace("new TextComponent(", "Component.literal(")
+		}
 		stonecutter.replacements.string(stonecutter.eval(stonecutter.current.version, ">=1.21.11"), "!renames_1_21_11") {
 			replace("ResourceLocation", "Identifier")
 			replace("location()", "identifier()")

@@ -159,8 +159,8 @@ stonecutter {
 
 			match("1.18", "fabric", "forge")
 			match("1.17", "fabric", "forge")
-			match("1.16", "fabric", "forge")
-			match("1.15", "fabric", "forge")
+			match("1.16", "fabric")
+			match("1.15", "fabric")
 			match("1.14", "fabric")
 		}
 

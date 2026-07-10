@@ -7,11 +7,9 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import java.util.List;
 import net.minecraft.ChatFormatting;
-import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.*;
 import net.minecraft.server.level.ServerPlayer;
 
 import static net.mat0u5.commandsafety.Main.config;
@@ -20,9 +18,7 @@ import static net.minecraft.commands.Commands.literal;
 
 public class ConfirmationCommand {
 
-    public static void register(CommandDispatcher<CommandSourceStack> dispatcher,
-                                CommandBuildContext commandRegistryAccess,
-                                Commands.CommandSelection registrationEnvironment) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
                 literal("confirmcmd")
                         .requires(source -> (hasPermission(source) || (source.getEntity() == null)))
@@ -47,30 +43,52 @@ public class ConfirmationCommand {
                 )
         );
     }
-
     private static boolean hasPermission(CommandSourceStack source) {
-        if (source.getPlayer() == null) return false;
-        //? if <= 1.21.9 {
+    //? if <= 1.18 {
+        try {
+            return source.getServer().getPlayerList().isOp(source.getPlayerOrException().getGameProfile());
+        }catch(Exception e) {}
+        return false;
+    //?} else {
+        /*if (source.getPlayer() == null) return false;
+        //? if <= 1.21.6 {
         return source.getServer().getPlayerList().isOp(source.getPlayer().getGameProfile());
         //?} else {
-        /*return source.getServer().getPlayerList().isOp(source.getPlayer().nameAndId());
-        *///?}
+        /^return source.getServer().getPlayerList().isOp(source.getPlayer().nameAndId());
+        ^///?}
+    *///?}
     }
 
     private static int setProperty(CommandSourceStack source, String name, int value) {
         config.setProperty(name, String.valueOf(value));
         CommandAnalyzer.loadConfig();
-        source.sendSystemMessage(Component.nullToEmpty("Set config '" + name + "' to: " + value));
+        //? if <= 1.15 {
+        source.sendSuccess(new TextComponent("Set config '" + name + "' to: " + value), false);
+        //?} else if <= 1.18 {
+        /*source.sendSuccess(Component.nullToEmpty("Set config '" + name + "' to: " + value), false);
+        *///?} else {
+        /*source.sendSystemMessage(Component.nullToEmpty("Set config '" + name + "' to: " + value));
+        *///?}
         return 1;
     }
 
     private static int getProperty(CommandSourceStack source, String name) {
         String property = config.getProperty(name);
         if (property == null) {
-            source.sendFailure(Component.nullToEmpty("Config '" + name + "' not found."));
+            //? if <= 1.15 {
+            source.sendFailure(new TextComponent("Config '" + name + "' not found."));
+            //?} else {
+            /*source.sendFailure(Component.nullToEmpty("Config '" + name + "' not found."));
+            *///?}
             return 0;
         }
-        source.sendSystemMessage(Component.nullToEmpty("Config '" + name + "' is set to: " + property));
+        //? if <= 1.15 {
+        source.sendSuccess(new TextComponent("Config '" + name + "' is set to: " + property), false);
+        //?} else if <= 1.18 {
+        /*source.sendSuccess(Component.nullToEmpty("Config '" + name + "' is set to: " + property), false);
+        *///?} else {
+        /*source.sendSystemMessage(Component.nullToEmpty("Config '" + name + "' is set to: " + property));
+        *///?}
         return 1;
     }
 
@@ -82,13 +100,13 @@ public class ConfirmationCommand {
         CommandValidator.PendingCommand pending = CommandValidator.getPendingCommand(player.getUUID());
 
         if (pending == null) {
-            player.sendSystemMessage(Component.literal("No pending command to confirm.").withStyle(ChatFormatting.RED), false);
+            player.displayClientMessage(new TextComponent("No pending command to confirm.").withStyle(ChatFormatting.RED), false);
             return 0;
         }
 
         if ("cancel".equals(action)) {
             CommandValidator.removePendingCommand(player.getUUID());
-            player.sendSystemMessage(Component.literal("Command cancelled.").withStyle(ChatFormatting.GREEN), false);
+            player.displayClientMessage(new TextComponent("Command cancelled.").withStyle(ChatFormatting.GREEN), false);
             return 1;
         }
 
@@ -98,14 +116,14 @@ public class ConfirmationCommand {
             try {
                 CommandDispatcher<CommandSourceStack> dispatcher = context.getSource().getServer().getCommands().getDispatcher();
                 dispatcher.execute(pending.command, source);
-                player.sendSystemMessage(Component.literal("Command executed.").withStyle(ChatFormatting.GREEN), false);
+                player.displayClientMessage(new TextComponent("Command executed.").withStyle(ChatFormatting.GREEN), false);
                 return 1;
             } catch (Exception e) {
-                player.sendSystemMessage(Component.literal("Failed to execute command: " + e.getMessage()).withStyle(ChatFormatting.RED), false);
+                player.displayClientMessage(new TextComponent("Failed to execute command: " + e.getMessage()).withStyle(ChatFormatting.RED), false);
                 return 0;
             }
         } else {
-            player.sendSystemMessage(Component.literal("Invalid confirmation code.").withStyle(ChatFormatting.RED), false);
+            player.displayClientMessage(new TextComponent("Invalid confirmation code.").withStyle(ChatFormatting.RED), false);
             return 0;
         }
     }

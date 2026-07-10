@@ -8,20 +8,19 @@ import net.minecraft.commands.arguments.ObjectiveArgument;
 import net.minecraft.commands.arguments.ScoreHolderArgument;
 import net.minecraft.commands.arguments.selector.EntitySelector;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.ClickEvent;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.*;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Objective;
-import net.minecraft.world.scores.ScoreHolder;
 import java.util.Collection;
 import java.util.List;
 
 import static net.mat0u5.commandsafety.Main.config;
+
+//? if > 1.20.2
+//import net.minecraft.world.scores.ScoreHolder;
 
 public class CommandAnalyzer {
 
@@ -67,7 +66,9 @@ public class CommandAnalyzer {
 
     private static String getCommandName(String command) {
         String[] parts = command.trim().split("\\s+");
-        return parts.length > 0 ? parts[0] : "";
+        String ret = parts.length > 0 ? parts[0] : "";
+        if (ret.startsWith("/")) ret = ret.replaceFirst("/","");
+        return ret;
     }
 
     private static Collection<? extends Entity> getEntities(String argumentName, CommandContext<CommandSourceStack> context) {
@@ -322,38 +323,44 @@ public class CommandAnalyzer {
         CommandValidator.addPendingCommand(player.getUUID(), command, warning);
         CommandValidator.PendingCommand pending = CommandValidator.getPendingCommand(player.getUUID());
 
-        MutableComponent confirmText = Component.literal("[CONFIRM]")
+        var confirmText = new TextComponent("[CONFIRM]")
                 .withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD)
                 .withStyle(style -> style
-                        //? if <= 1.21.4 {
-                        .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/confirmcmd " + pending.confirmId))
-                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Click to execute the command"))));
-                        //?} else {
+                        //? if <= 1.15 {
+                        .setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/confirmcmd " + pending.confirmId))
+                        .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent("Click to execute the command"))));
+                        //?} else if <= 1.21.4 {
+                        /*.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/confirmcmd " + pending.confirmId))
+                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent("Click to execute the command"))));
+                        *///?} else {
                         /*.withClickEvent(new ClickEvent.RunCommand("/confirmcmd " + pending.confirmId))
-                        .withHoverEvent(new HoverEvent.ShowText(Component.literal("Click to execute the command"))));
+                        .withHoverEvent(new HoverEvent.ShowText(new TextComponent("Click to execute the command"))));
                         *///?}
 
-        MutableComponent cancelText = Component.literal("[CANCEL]")
+        var cancelText = new TextComponent("[CANCEL]")
                 .withStyle(ChatFormatting.RED, ChatFormatting.BOLD)
                 .withStyle(style -> style
-                        //? if <= 1.21.4 {
-                        .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/confirmcmd cancel"))
-                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Click to cancel"))));
-                        //?} else {
+                        //? if <= 1.15 {
+                        .setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/confirmcmd cancel"))
+                        .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent("Click to cancel"))));
+                        //?} else if <= 1.21.4 {
+                        /*.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/confirmcmd cancel"))
+                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent("Click to cancel"))));
+                        *///?} else {
                         /*.withClickEvent(new ClickEvent.RunCommand("/confirmcmd cancel"))
-                        .withHoverEvent(new HoverEvent.ShowText(Component.literal("Click to cancel"))));
+                        .withHoverEvent(new HoverEvent.ShowText(new TextComponent("Click to cancel"))));
                         *///?}
 
-        MutableComponent message = Component.literal("⚠ DANGEROUS COMMAND WARNING ⚠")
+        var message = new TextComponent("⚠ DANGEROUS COMMAND WARNING ⚠")
                 .withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD)
-                .append(Component.literal("\n" + warning).withStyle(ChatFormatting.WHITE))
-                .append(Component.literal("\nCommand: ").withStyle(ChatFormatting.GRAY))
-                .append(Component.literal(command).withStyle(ChatFormatting.YELLOW))
-                .append(Component.literal("\n\n"))
+                .append(new TextComponent("\n" + warning).withStyle(ChatFormatting.WHITE))
+                .append(new TextComponent("\nCommand: ").withStyle(ChatFormatting.GRAY))
+                .append(new TextComponent(command).withStyle(ChatFormatting.YELLOW))
+                .append(new TextComponent("\n\n"))
                 .append(confirmText)
-                .append(Component.literal("  "))
+                .append(new TextComponent("  "))
                 .append(cancelText);
 
-        player.sendSystemMessage(message, false);
+        player.displayClientMessage(message, false);
     }
 }
